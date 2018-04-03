@@ -13,80 +13,82 @@ int to_digit(char ch)
 		exit(EXIT_FAILURE);
 }
 
-double parse(char* ch)
+int parse(char* ch)
 {
 	int pt= 0;
-	double res = 0;
-	double seconds = 0;
-	for(int i=strlen(ch)-2; i>0; i--)
+	long int res = 0;
+	long int seconds = 0;
+	for(int i=strlen(ch)-2; i>=0; i--)
 		{	res = pow(10,pt++);
 			seconds += (to_digit(ch[i]))*res;
 		}
-	printf("Parse");
 	return seconds;
 }
 
 
-void set_time(int parameter, char *argv[], conf* config)
+int set_time(char *argv[], int argc, int parameter, long int * seconds)
 {
 	char unit;
+	int flag = 1;
+	int i = parameter;
 	do{
-		printf("\nParametr: %d\n",parameter);
-			return;
-		printf("Set time");
-	/*	unit = argv[*parameter][strlen(argv[*parameter])-1];
+		unit = argv[i][strlen(argv[i])-1];
 		switch(unit)
 		{
 			case 'h':
-				config->time += 3600 * parse(argv[*parameter]);
+				(*seconds) += 3600 * parse(argv[i]);
 				break;
 			case 'm':
-				config->time += 60 * parse(argv[*parameter]);
+				(*seconds) += 60 * parse(argv[i]);
 				break;
 			case 's':
-				config->time += parse(argv[*parameter]);
+				(*seconds) += parse(argv[i]);
 				break;
 			default:
-				return;
+				flag = 0;
 				break;
-		} */
-	}while((parameter)++);
+		} i++;
+	}while(flag && i < argc); 
+
+	return i;
 }
 
-void param(int* parameter, char *argv[], conf* config)
+
+conf build_config(int argc, char * argv[])
 {
-	
-	if(argv[*parameter][1] == 't')
-		{
-		printf("Param");
-		printf("\nParametr: %d\n",*parameter);
-		*parameter++;
-		set_time(*parameter, argv, &(*config));
+	int parameter = 3;
+	long int seconds = 0;
+	while(parameter < argc){
+		if(argv[parameter][0] == '-')
+		{	
+			if(argv[parameter][1] == 't')
+				{
+				parameter++;
+				parameter = set_time(argv, argc, parameter, &seconds)-1;
+				}
+		     if(argv[parameter][1] == 'p')
+			 	printf("Wywołanie mmap");
+		
+			
 		}
+		parameter++;
+	}
 	
-	//else if(argv[*parameter][1] == 'm')
-
-		//set_mmap(*parameter, argv, config);
-
-	else if(argv[*parameter][1] == 'R')
-		config->r = 1;
-
-
+	conf config = {NULL, NULL, seconds, 1, 1048576};
+	return config;
 }
 
 int main(int argc, char *argv[] ){
 	
-	int parameter = 3;
+	
+
 	if(check_dir(argv[1]) && check_dir(argv[2]))
-		printf("To foldery");
+		printf("To foldery \n");
 
-	conf config = get_conf();
+	conf config = build_config(argc, argv);
+	printf("time = %ld", config.time);
 
-	if(argv[parameter][0] == '-')
-		param(&parameter, argv, &config);
 
-	printf("%ld\n",config.time);
-	printf("%d\n",argc);
 	return 0;
 	
 }
