@@ -1,5 +1,5 @@
 Files := $(wildcard Files/*.c)
 
 all:
-	gcc $(Files) -o demon -I Headers
+	gcc $(Files) -lm -o demon -I Headers
 
