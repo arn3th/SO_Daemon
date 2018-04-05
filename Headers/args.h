@@ -9,7 +9,7 @@ int to_digit(char);
 int parse(char*);
 int set_time(char**, int, int, long int*);
 int set_mmap(char**, int, int, size_t*);
-conf build_config(int, char**);
+
 
 
 #endif

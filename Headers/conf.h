@@ -2,6 +2,8 @@
 #define CONF_H
 
 #include <stdlib.h>
+#include <stdio.h>
+#include "args.h"
 
 typedef struct {
     char* s_dir;
@@ -12,5 +14,6 @@ typedef struct {
 } conf;
 
 conf get_conf();
+conf build_config(int, char**);
 
 #endif
