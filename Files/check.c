@@ -1,4 +1,3 @@
-#include <dirent.h>
 #include "check.h"
 
 int check_dir(const char * name){
