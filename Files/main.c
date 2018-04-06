@@ -13,18 +13,17 @@
 #include "args.h"
 #include "daemon.h"
 
-int working = 0;
-
 void help()
 {
 	printf("Pomoc: źródłowy docelowy \n");
 }
-void sig()
+void handler(int signum)
 {
-	if(sync)
-		printf("Synchronizacja trwa");
-	else
-		printf("Demon został wybudzony");
+	if(signum == SIGUSR1)
+	{
+	//natychmiastowe rozpoczęcie synchronizacji
+	system("touch /home/artwis/SO/signal.txt");
+	}
 }
 
 
@@ -38,24 +37,7 @@ int main(int argc, char *argv[] ){
 		exit(EXIT_SUCCESS);
 	}
 
-	int pid = 0; //pid zwracany przez demona
-	signal(SIGUSR1, sig);
-
-	if(pid != 0){ //Jeśli zablokowano i zwrócono pid procesu, który blokował
-		if(argc == 2 && argv[1] == "-s")
-		{
-				kill(pid, SIGUSR1);		
-		}
-
-		else
-		{
-			printf("Proszę użyć '-s' aby uruchomić synchronizację");
-		}
-
-		exit(EXIT_SUCCESS);
-	}
-	
-
+	signal(SIGUSR1, handler);
 	
 
 	conf config = build_config(argc, argv);
@@ -70,15 +52,10 @@ int main(int argc, char *argv[] ){
 	create_daemon();
 
 
-	//druga blokada?
-
 
  	rm_files(config);
 
-	/*while(1)
-	{
-		//działanie demona
-	} */
+	//działanie demona
 	return 0;
 	
 }
