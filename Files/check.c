@@ -26,3 +26,44 @@ int dir_in_dir(const char * src, const char * dest){
         return 0;
 }
 
+int exist(char * fname)
+{
+	if(access(fname,F_OK) != -1)
+		return 1;
+	else
+		return 0;
+}
+
+void  rm_files(conf config)
+{
+    DIR *dir = opendir(config.d_dir);
+	struct dirent *dirent;
+
+	while((dirent = readdir(dir)) != NULL)
+	{
+		if(strcmp(dirent->d_name,".") == 0 || strcmp(dirent->d_name,"..") == 0)
+				continue;
+                
+        printf("%s\n", dirent->d_name);
+		char * path = malloc(sizeof(char) * (strlen(config.s_dir) + strlen(dirent->d_name) + 1));
+		strcat(path,config.s_dir);
+		strcat(path,"/");		
+    	strcat(path,dirent->d_name);
+		if(!(exist(path)))
+		{
+            char * dest_path = malloc(sizeof(char) * (strlen(config.d_dir) + strlen(dirent->d_name) + 1));
+		    strcat(dest_path,config.d_dir);
+		    strcat(dest_path,"/");
+		    strcat(dest_path,dirent->d_name);
+		    printf("Usuwam %s\n", dest_path);
+            if(dirent->d_type == DT_REG)
+		        remove(dest_path);
+            else if(dirent->d_type == DT_DIR)
+                rm(dest_path);
+            
+            free(dest_path);
+		}
+		free(path);  
+		
+	}
+}

@@ -7,6 +7,7 @@
 #include <linux/fs.h>
 #include <signal.h>
 
+
 #include "check.h"
 #include "conf.h"
 #include "args.h"
@@ -16,7 +17,7 @@ int working = 0;
 
 void help()
 {
-	printf("Pomoc \n \n \n");
+	printf("Pomoc: źródłowy docelowy \n");
 }
 void sig()
 {
@@ -25,6 +26,8 @@ void sig()
 	else
 		printf("Demon został wybudzony");
 }
+
+
 int main(int argc, char *argv[] ){
 	
 
@@ -59,16 +62,23 @@ int main(int argc, char *argv[] ){
 	printf("time = %ld\n", config.time);
 	printf("size = %ld\n",(long int)config.mmap_size);
 	printf("rec = %d\n", config.r);
+	config.s_dir = malloc(sizeof(char)*128);
+	config.d_dir = malloc(sizeof(char)*128);
+    realpath(argv[1], config.s_dir);
+    realpath(argv[2], config.d_dir);
 
-	create_daemon();
+	//create_daemon();
 
 
 	//druga blokada?
 
-	while(1)
+
+ 	rm_files(config);
+
+	/*while(1)
 	{
 		//działanie demona
-	}
+	} */
 	return 0;
 	
 }

@@ -8,6 +8,7 @@ conf get_conf(){
 
 conf build_config(int argc, char * argv[])
 {
+    conf c = get_conf();
 
     if(!(check_dir(argv[1]) && check_dir(argv[2])))
 		{
@@ -22,8 +23,8 @@ conf build_config(int argc, char * argv[])
         }
 
 	int parameter = 3;
-	long int seconds = 0;
-    size_t mmap_size = 1;
+	long int seconds = c.time;
+    size_t mmap_size = c.mmap_size;
 	int rec = 0;
 	while(parameter < argc){
 		if(argv[parameter][0] == '-')
@@ -31,24 +32,27 @@ conf build_config(int argc, char * argv[])
 			if(argv[parameter][1] == 't')
 				{
 				parameter++;
+                seconds = 0;
 				parameter = set_time(argv, argc, parameter, &seconds)-1;
 				}
 		     if(argv[parameter][1] == 'p')
 			 	{
 					parameter++;
+                    mmap_size = 1;
 					parameter = set_mmap(argv, argc, parameter, &mmap_size)-1;
 				 }
 			 if(argv[parameter][1] == 'R')
 				rec = 1;
+             else
+             {
+                 printf("Błąd składni.\n");
+                 exit(EXIT_FAILURE);
+             }
 		}
 		parameter++;
 	}
 
 
-	conf config = {argv[1], argv[2], seconds, rec, mmap_size};
-
-    char buf[128], buff[128];
-    config.s_dir = realpath(argv[1], buf);
-    config.d_dir = realpath(argv[2], buff);
+	conf config = {NULL, NULL, seconds, rec, mmap_size};
 	return config;
 }
