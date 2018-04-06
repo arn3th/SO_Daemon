@@ -34,7 +34,7 @@ int exist(char * fname)
 		return 0;
 }
 
-void  rm_files(conf config)
+void rm_files(conf config)
 {
     DIR *dir = opendir(config.d_dir);
 	struct dirent *dirent;
@@ -47,7 +47,6 @@ void  rm_files(conf config)
 		if(strcmp(dirent->d_name,".") == 0 || strcmp(dirent->d_name,"..") == 0)
 				continue;
 
-        printf("%s\n", dirent->d_name);
 		strcat(path,config.s_dir);
 		strcat(path,"/");		
     	strcat(path,dirent->d_name);
@@ -60,8 +59,7 @@ void  rm_files(conf config)
 		        remove(dest_path);
             else if(dirent->d_type == DT_DIR)
                 {
-                    printf("Wysyłam do recursive: %s\n", dest_path);
-                    (void)recursiveDelete(dest_path);
+                    recursive_rm(dest_path);
                     remove(dest_path);
                 }       
 		}
@@ -70,43 +68,40 @@ void  rm_files(conf config)
 	}
 }
 
-int recursiveDelete(char* dirname) {
+void recursive_rm(char* dirname) {
 
-  DIR *dp;
-  struct dirent *ep;
-
-  char abs_filename[FILENAME_MAX];
-
-  dp = opendir (dirname);
-  if (dp != NULL)
+  DIR *d;
+  d = opendir(dirname);
+  struct dirent *de;
+  char path[FILENAME_MAX];
+  
+  if (d != NULL)
     {
-      while (ep = readdir (dp)) {
+      while (de = readdir (d)) {
         struct stat stFileInfo;
 
-        snprintf(abs_filename, FILENAME_MAX, "%s/%s", dirname, ep->d_name);
+        snprintf(path, FILENAME_MAX, "%s/%s", dirname, de->d_name);
 
-        if (lstat(abs_filename, &stFileInfo) < 0)
-          perror ( abs_filename );
+        if (lstat(path, &stFileInfo) < 0)
+            perror (path);
 
         if(S_ISDIR(stFileInfo.st_mode)) {
-          if(strcmp(ep->d_name, ".") && 
-             strcmp(ep->d_name, "..")) {
-            printf("%s directory\n",abs_filename);
-            recursiveDelete(abs_filename);
+            if(strcmp(de->d_name, ".") && strcmp(de->d_name, "..")) {
+                //rozpoczynanie usuwania katalogu;
+                recursive_rm(path);
           }
-        } else {
-          printf("%s file\n",abs_filename);
-                  remove(abs_filename);
         }
-          }
-      (void) closedir (dp);
+        else {
+            //usuwanie pliku
+            remove(path);
         }
+       }
+      (void)closedir(d);
+    }
   else
-    perror ("Couldn't open the directory");
-
+    perror ("Błąd otwarcia katalogu");
 
   remove(dirname);
-  return 0;
 
 }
 

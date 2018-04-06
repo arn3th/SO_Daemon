@@ -12,16 +12,19 @@
 #include "conf.h"
 #include "args.h"
 #include "daemon.h"
+#include "copy.h"
+
 
 void help()
 {
 	printf("Pomoc: źródłowy docelowy \n");
 }
+
 void handler(int signum)
 {
 	if(signum == SIGUSR1)
 	{
-	//natychmiastowe rozpoczęcie synchronizacji
+	//wpis do logu o rozpoczęciu synchronizacji
 	system("touch /home/artwis/SO/signal.txt");
 	}
 }
@@ -55,7 +58,17 @@ int main(int argc, char *argv[] ){
 
  	rm_files(config);
 
-	//działanie demona
+	while(1)
+	{
+		sleep(config.time);
+		//działa demona
+	}
+	
+
+
+	
+
+	
 	return 0;
 	
 }
