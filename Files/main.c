@@ -67,7 +67,7 @@ int main(int argc, char *argv[] ){
     realpath(argv[1], config.s_dir);
     realpath(argv[2], config.d_dir);
 
-	//create_daemon();
+	create_daemon();
 
 
 	//druga blokada?
