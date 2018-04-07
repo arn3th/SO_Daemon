@@ -16,4 +16,6 @@ int dir_in_dir(const char*, const char*);
 int exists(char*);
 void rm_files(conf);
 void recursive_rm(char*);
+
+off_t check_size(char*);
 #endif

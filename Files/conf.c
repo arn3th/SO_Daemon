@@ -24,7 +24,7 @@ conf build_config(int argc, char * argv[])
 
 	int parameter = 3;
 	long int seconds = c.time;
-    size_t mmap_size = c.mmap_size;
+    off_t mmap_size = c.mmap_size;
 	int rec = 0;
 	while(parameter < argc){
 		if(argv[parameter][0] == '-')

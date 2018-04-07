@@ -10,7 +10,7 @@ typedef struct {
     char* d_dir;
     long time;
     int r;
-    size_t mmap_size;
+    off_t mmap_size;
 } conf;
 
 conf get_conf();

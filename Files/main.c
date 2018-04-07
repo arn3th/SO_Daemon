@@ -52,17 +52,17 @@ int main(int argc, char *argv[] ){
     realpath(argv[1], config.s_dir);
     realpath(argv[2], config.d_dir);
 
-	create_daemon();
+	//create_daemon();
 
 
 
  	rm_files(config);
 
-	while(1)
+/*	while(1)
 	{
 		sleep(config.time);
 		//działa demona
-	}
+	} */
 	
 
 

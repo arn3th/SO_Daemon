@@ -105,3 +105,11 @@ void recursive_rm(char* dirname) {
 
 }
 
+off_t check_size(char* filename)
+{
+    struct stat st;
+    stat(filename, &st);
+    printf("File size: %ld bytes\n", st.st_size);
+
+    return st.st_size;
+}
