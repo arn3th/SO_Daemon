@@ -43,11 +43,6 @@ conf build_config(int argc, char * argv[])
 				 }
 			 if(argv[parameter][1] == 'R')
 				rec = 1;
-             else
-             {
-                 printf("Błąd składni.\n");
-                 exit(EXIT_FAILURE);
-             }
 		}
 		parameter++;
 	}

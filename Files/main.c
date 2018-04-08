@@ -14,7 +14,6 @@
 #include "daemon.h"
 #include "copy.h"
 
-
 void help()
 {
 	printf("Pomoc: źródłowy docelowy \n");
@@ -24,7 +23,6 @@ void handler(int signum)
 {
 	if(signum == SIGUSR1)
 	{
-	//wpis do logu o rozpoczęciu synchronizacji
 	system("touch /home/artwis/SO/signal.txt");
 	}
 }
@@ -50,18 +48,14 @@ int main(int argc, char *argv[] ){
     realpath(argv[1], config.s_dir);
     realpath(argv[2], config.d_dir);
 
-	//create_daemon();
-
-
-
- 	rm_files(config);
-
-/*	while(1)
+	create_daemon();
+	while(1)
 	{
 		sleep(config.time);
-		//działa demona
-	} */
-	work(config.s_dir, config.d_dir, config.mmap_size, config.r);
+		rm_files(config);
+		work(config.s_dir, config.d_dir, config.mmap_size, config.r);
+	} 
+	
 
 	
 

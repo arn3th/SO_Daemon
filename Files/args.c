@@ -55,9 +55,11 @@ int set_mmap(char* argv[], int argc, int parameter, size_t* mmap_size)
 	char unit = argv[i][strlen(argv[i])-1];
 	switch(unit)
 	{
+		case 'b':
+			(*mmap_size) = parse(argv[i]);
+			break;
 		case 'k':
 			(*mmap_size) = 1024 * parse(argv[i]);
-            printf("To było z kb %s\n", argv[i]);
 			break;
 		case 'm':
 			(*mmap_size) = 1024 * 1024 * parse(argv[i]);
