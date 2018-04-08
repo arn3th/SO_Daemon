@@ -26,7 +26,7 @@ int dir_in_dir(const char * src, const char * dest){
         return 0;
 }
 
-int exist(char * fname)
+int exists(char * fname)
 {
 	if(access(fname,F_OK) != -1)
 		return 1;
@@ -50,7 +50,7 @@ void rm_files(conf config)
 		strcat(path,config.s_dir);
 		strcat(path,"/");		
     	strcat(path,dirent->d_name);
-		if(!(exist(path)))
+		if(!(exists(path)))
 		{
 		    strcat(dest_path,config.d_dir);
 		    strcat(dest_path,"/");
@@ -112,4 +112,35 @@ off_t check_size(char* filename)
     printf("File size: %ld bytes\n", st.st_size);
 
     return st.st_size;
+}
+
+
+int compare_time(char * src, char * dest)
+{
+    struct stat st1, st2;
+    stat(src, &st1);
+    stat(dest, &st2);
+
+    return (st1.st_mtim.tv_sec == st2.st_mtim.tv_sec);
+}
+
+void change_time(char * src, char * dest)
+{
+    struct stat st;
+    struct utimbuf new_times;
+    stat(src, &st);
+    new_times.actime = st.st_atim.tv_sec;
+    new_times.modtime = st.st_mtim.tv_sec;
+    utime(dest, &new_times);
+    chmod(dest, st.st_mode);
+}
+
+char* make_path(char* path, char* name)
+{
+    char * full_path = malloc(sizeof(char)*FILENAME_MAX);
+    strcat(full_path, path);
+    strcat(full_path, "/");
+    strcat(full_path, name);
+
+    return full_path;
 }

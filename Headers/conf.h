@@ -6,8 +6,8 @@
 #include "args.h"
 
 typedef struct {
-    char* s_dir;
-    char* d_dir;
+    char s_dir[FILENAME_MAX];
+    char d_dir[FILENAME_MAX];
     long time;
     int r;
     off_t mmap_size;

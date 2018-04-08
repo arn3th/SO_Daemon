@@ -47,8 +47,6 @@ int main(int argc, char *argv[] ){
 	printf("time = %ld\n", config.time);
 	printf("size = %ld\n",(long int)config.mmap_size);
 	printf("rec = %d\n", config.r);
-	config.s_dir = malloc(sizeof(char)*128);
-	config.d_dir = malloc(sizeof(char)*128);
     realpath(argv[1], config.s_dir);
     realpath(argv[2], config.d_dir);
 
@@ -63,8 +61,7 @@ int main(int argc, char *argv[] ){
 		sleep(config.time);
 		//działa demona
 	} */
-	
-
+	work(config.s_dir, config.d_dir, config.mmap_size, config.r);
 
 	
 

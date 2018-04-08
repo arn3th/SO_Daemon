@@ -2,7 +2,7 @@
 #include "check.h"
 
 conf get_conf(){
-    conf config = { NULL, NULL, 300, 0, 1048576 };
+    conf config = { "", "", 300, 0, 1048576 };
     return config;
     }
 
@@ -53,6 +53,6 @@ conf build_config(int argc, char * argv[])
 	}
 
 
-	conf config = {NULL, NULL, seconds, rec, mmap_size};
+	conf config = {"", "", seconds, rec, mmap_size};
 	return config;
 }

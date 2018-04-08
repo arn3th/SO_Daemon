@@ -6,6 +6,8 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/stat.h>
+#include <utime.h>
+#include <time.h>
 
 #include "conf.h"
 
@@ -18,4 +20,7 @@ void rm_files(conf);
 void recursive_rm(char*);
 
 off_t check_size(char*);
+int compare_time(char*, char*);
+void change_time(char*, char*);
+char* make_path(char*, char*);
 #endif

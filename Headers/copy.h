@@ -9,9 +9,9 @@
 #include "conf.h"
 
 
-void work(conf);
+void work(char*, char*, off_t, int);
 
-void make_copy(char*, char*, char*, off_t);
+void make_copy(char*, char*, off_t);
 void copy_normal(char*, char*);
 void copy_mmap(char*, char*);
 
