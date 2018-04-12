@@ -15,6 +15,4 @@ typedef struct {
 
 conf get_conf();
 conf build_config(int, char**);
-
-
 #endif

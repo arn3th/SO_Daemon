@@ -8,6 +8,7 @@
 #include <sys/stat.h>
 #include <utime.h>
 #include <time.h>
+#include <syslog.h>
 
 #include "conf.h"
 
@@ -22,5 +23,4 @@ void recursive_rm(char*);
 off_t check_size(char*);
 int compare_time(char*, char*);
 void change_time(char*, char*);
-char* make_path(char*, char*);
 #endif

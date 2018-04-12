@@ -5,6 +5,7 @@
 #include <string.h>
 #include <sys/mman.h>
 #include <fcntl.h>
+#include <syslog.h>
 
 #include "conf.h"
 

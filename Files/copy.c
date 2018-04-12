@@ -7,16 +7,16 @@ void work(char* s_dir, char* d_dir, off_t mmap_size, int recursive)
     struct dirent *dirent;
     int copy = 0;
     int create = 0;
-    char *src_full_path;
-    char  *dest_full_path;
+    char src_full_path[128];
+    char  dest_full_path[128];
     if(dir != NULL){
     while(dirent = readdir(dir))
     {        
         if(strcmp(dirent->d_name,".") == 0 || strcmp(dirent->d_name,"..") == 0)
 				continue;
 
-             dest_full_path = make_path(d_dir, dirent->d_name);
-             src_full_path = make_path(s_dir,dirent->d_name);
+             snprintf(dest_full_path,FILENAME_MAX,"%s/%s",d_dir,dirent->d_name);
+             snprintf(src_full_path,FILENAME_MAX,"%s/%s",s_dir,dirent->d_name);
 
             if(exists(dest_full_path))
             {
@@ -34,6 +34,7 @@ void work(char* s_dir, char* d_dir, off_t mmap_size, int recursive)
                     if(create)
                         {
                             creat(dest_full_path, 0666);
+                            syslog(LOG_INFO,"Tworzę plik: %s",dest_full_path);
                             printf("Stworzono: %s\n",dest_full_path);
                         }
                     make_copy(src_full_path, dest_full_path, mmap_size);
@@ -42,7 +43,10 @@ void work(char* s_dir, char* d_dir, off_t mmap_size, int recursive)
             else if( copy && dirent->d_type == DT_DIR && recursive)
                 {
                     if(create)
-                        mkdir(dest_full_path, 0744);
+                        {
+                         mkdir(dest_full_path, 0744);
+                         syslog(LOG_INFO,"Tworzę katalog: %s",dest_full_path);
+                        }
                             printf("wywołuje work z: \n");
                             printf("Src: %s\n", src_full_path);
                             printf("Dest: %s\n", dest_full_path);
@@ -51,10 +55,6 @@ void work(char* s_dir, char* d_dir, off_t mmap_size, int recursive)
                 }
                 copy = 0;
                 create = 0;
-                strcpy(src_full_path,"");
-                strcpy(dest_full_path,"");
-                free(src_full_path);
-                free(dest_full_path);
     } 
     }
     (void)closedir(dir);
@@ -68,6 +68,7 @@ void make_copy(char * src_f, char * dest_f,  off_t max_size)
         copy_mmap(src_f, dest_f);
     else
         copy_normal(src_f, dest_f); 
+    syslog(LOG_INFO,"Kopiuję: %s",src_f);
 }
 
 void copy_normal(char* src_f, char* dest_f)
@@ -80,7 +81,6 @@ void copy_normal(char* src_f, char* dest_f)
     printf("Kopiowanie %s\n", dest_f);
     while((f = read(sf,buf,sizeof(buf)))>0)
         write(df,buf,f);
-
 
     close(sf);
     close(df);

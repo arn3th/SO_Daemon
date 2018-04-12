@@ -38,23 +38,18 @@ void rm_files(conf config)
 {
     DIR *dir = opendir(config.d_dir);
 	struct dirent *dirent;
-    char path[128];
-    char dest_path[128];
+    char path[FILENAME_MAX];
+    char dest_path[FILENAME_MAX];
 	while((dirent = readdir(dir)) != NULL)
 	{
-        strcpy(path,"");
-        strcpy(dest_path,"");
 		if(strcmp(dirent->d_name,".") == 0 || strcmp(dirent->d_name,"..") == 0)
 				continue;
 
-		strcat(path,config.s_dir);
-		strcat(path,"/");		
-    	strcat(path,dirent->d_name);
+        snprintf(path,FILENAME_MAX,"%s/%s",config.s_dir,dirent->d_name);
+
 		if(!(exists(path)))
 		{
-		    strcat(dest_path,config.d_dir);
-		    strcat(dest_path,"/");
-		    strcat(dest_path,dirent->d_name);
+            snprintf(dest_path,FILENAME_MAX,"%s/%s",config.d_dir,dirent->d_name);
             if(dirent->d_type == DT_REG)
 		        remove(dest_path);
             else if(dirent->d_type == DT_DIR)
@@ -94,6 +89,7 @@ void recursive_rm(char* dirname) {
         else {
             //usuwanie pliku
             remove(path);
+            syslog(LOG_INFO,"Usuwam plik: %s",path);
         }
        }
       (void)closedir(d);
@@ -102,6 +98,7 @@ void recursive_rm(char* dirname) {
     perror ("Błąd otwarcia katalogu");
 
   remove(dirname);
+  syslog(LOG_INFO,"Usuwam katalog: %s",dirname);
 
 }
 
@@ -127,20 +124,10 @@ int compare_time(char * src, char * dest)
 void change_time(char * src, char * dest)
 {
     struct stat st;
-    struct utimbuf new_times;
+    struct utimbuf buf;
     stat(src, &st);
-    new_times.actime = st.st_atim.tv_sec;
-    new_times.modtime = st.st_mtim.tv_sec;
-    utime(dest, &new_times);
+    buf.actime = st.st_atim.tv_sec;
+    buf.modtime = st.st_mtim.tv_sec;
+    utime(dest, &buf);
     chmod(dest, st.st_mode);
-}
-
-char* make_path(char* path, char* name)
-{
-    char * full_path = malloc(sizeof(char)*FILENAME_MAX);
-    strcat(full_path, path);
-    strcat(full_path, "/");
-    strcat(full_path, name);
-
-    return full_path;
 }
