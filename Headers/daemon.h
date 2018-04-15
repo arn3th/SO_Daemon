@@ -9,6 +9,9 @@
 #include <stdio.h>
 #include <fcntl.h>
 
+/**
+\brief przeistacza program w demona
+*/
 void create_daemon();
 
 #endif

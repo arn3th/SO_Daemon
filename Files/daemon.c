@@ -1,8 +1,5 @@
 #include "daemon.h"
 
-/**
-\brief przeistacza program w demona
-*/
 void create_daemon()
 {
     pid_t pid;
@@ -26,7 +23,4 @@ void create_daemon()
 	open("/dev/null", O_RDWR);
 	dup(0);
 	dup(0);
-
-
-
 }

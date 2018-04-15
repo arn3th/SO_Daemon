@@ -1,19 +1,11 @@
 #include "conf.h"
 #include "check.h"
-/**
-\return zwraca domyślne ustawienia
-*/
+
 conf get_conf(){
     conf config = { "", "", 300, 0, 1048576 };
     return config;
     }
 
-/**
-\brief tworzy ustawienia na podstawie argumentów podanych podczas wywołania programu
-\details poczatkowo sprawdzane są pierwsze dwa argumenty, czy są katalogami oraz czy nie zawierają się. Następnie pobierane są domyślne ustawienia, a każdy parametr (czas, rozmiar mmap)
-jest ustawiony za pomocą poszczególnych funkcji
-\return zwraca ustawienia z odpowiednimi wartościami
-*/
 conf build_config(int argc, char * argv[])
 {
     
