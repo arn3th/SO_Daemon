@@ -1,14 +1,22 @@
 #include "conf.h"
 #include "check.h"
-
+/**
+\return zwraca domyślne ustawienia
+*/
 conf get_conf(){
     conf config = { "", "", 300, 0, 1048576 };
     return config;
     }
 
+/**
+\brief tworzy ustawienia na podstawie argumentów podanych podczas wywołania programu
+\details poczatkowo sprawdzane są pierwsze dwa argumenty, czy są katalogami oraz czy nie zawierają się. Następnie pobierane są domyślne ustawienia, a każdy parametr (czas, rozmiar mmap)
+jest ustawiony za pomocą poszczególnych funkcji
+\return zwraca ustawienia z odpowiednimi wartościami
+*/
 conf build_config(int argc, char * argv[])
 {
-    conf c = get_conf();
+    
 
     if(!(check_dir(argv[1]) && check_dir(argv[2])))
 		{
@@ -22,10 +30,12 @@ conf build_config(int argc, char * argv[])
             exit(EXIT_FAILURE);
         }
 
+	conf c = get_conf();
 	int parameter = 3;
 	long int seconds = c.time;
     off_t mmap_size = c.mmap_size;
 	int rec = 0;
+	
 	while(parameter < argc){
 		if(argv[parameter][0] == '-')
 		{	

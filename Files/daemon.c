@@ -1,6 +1,8 @@
 #include "daemon.h"
 
-
+/**
+\brief przeistacza program w demona
+*/
 void create_daemon()
 {
     pid_t pid;

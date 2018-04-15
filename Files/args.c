@@ -1,6 +1,9 @@
 #include "args.h"
 #include <stdio.h>
-
+/**
+\brief sprawdza czy znak jest cyfrą
+\return zwraca cyfrę
+**/
 int to_digit(char ch)
 {
 	if(ch >= 48 && ch <=57)
@@ -8,7 +11,10 @@ int to_digit(char ch)
 	else
 		exit(EXIT_FAILURE);
 }
-
+/**
+\brief Konwertuje łańuch prezentujący liczbę na liczbę
+\return zwraca przekonwertowaną liczbę
+**/
 int parse(char* ch)
 {
 	int pt= 0;
@@ -21,7 +27,10 @@ int parse(char* ch)
 	return seconds;
 }
 
-
+/**
+\brief konwertuje i zapisuje czas podany w parametrach wywołania programu
+\return zwraca numer argumentu ostatnio odczytywanego
+**/
 int set_time(char *argv[], int argc, int parameter, long int * seconds)
 {
 	char unit;
@@ -48,7 +57,10 @@ int set_time(char *argv[], int argc, int parameter, long int * seconds)
 
 	return i;
 }
-
+/**
+\brief konwertuje i zapisuje rozmiar kopiowania mmap podany w prametrach wywołania programu
+\return zwraca numer argumentu ostatnio odczytywanego
+**/
 int set_mmap(char* argv[], int argc, int parameter, size_t* mmap_size)
 {
 	int i = parameter;

@@ -15,11 +15,17 @@
 #include "daemon.h"
 #include "copy.h"
 
+/**
+\brief wyświetla pomoc
+*/
 void help()
 {
 	printf("Pomoc: źródłowy docelowy \n");
 }
 
+/**
+\brief obsługuje sygnał SIGUSR1
+*/
 void handler(int signum)
 {
 	if(signum == SIGUSR1)
@@ -32,39 +38,32 @@ void handler(int signum)
 int main(int argc, char *argv[] ){
 	
 	openlog("DAEMON_SO", LOG_PID, LOG_USER);
-	if(argc == 2 && !(strcmp(argv[1],"--help")))
+	if(argc == 2 && !(strcmp(argv[1],"--help"))) //jeśli wywołano z --help
 	{
 		help();
 		exit(EXIT_SUCCESS);
 	}
 
-	signal(SIGUSR1, handler);
-	
-
-	conf config = build_config(argc, argv);
+	signal(SIGUSR1, handler); //ustawienie funkcji obsługującej sygnał SIGUSR1
+	conf config = build_config(argc, argv); //stworzenie ustawień na podstawie argumentów
 	printf("time = %ld\n", config.time);
 	printf("size = %ld\n",(long int)config.mmap_size);
 	printf("rec = %d\n", config.r);
 
-	realpath(argv[1], config.s_dir);
+	realpath(argv[1], config.s_dir); //dodanie do ustawień rzeczywistych ścieżek do katalogów
 	realpath(argv[2], config.d_dir);
 
 	create_daemon();
    
 	while(1)
 	{
-		syslog(LOG_INFO, "Usypiam na %ld s", config.time);
-		sleep(config.time);
+		syslog(LOG_INFO, "Usypiam na %ld s", config.time); 
+		sleep(config.time);		//usypienie demona
 		syslog(LOG_INFO, "Wybudzam");
 		
-		rm_files(config);
-		work(config.s_dir, config.d_dir, config.mmap_size, config.r);
+		rm_files(config);	//pozbycie się niepotrzebnych plików z katalogu docelowego
+		work(config.s_dir, config.d_dir, config.mmap_size, config.r); 	//kopiowanie plików z katalogu źródłowego do docelowego
 	} 
-	
-
-	
-
-	
 	return 0;
 	
 }
