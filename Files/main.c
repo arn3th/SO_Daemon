@@ -20,7 +20,7 @@
 */
 void help()
 {
-	printf("Pomoc: źródłowy docelowy \n");
+	printf("Pomoc: readme.txt");
 }
 
 /**
@@ -46,9 +46,9 @@ int main(int argc, char *argv[] ){
 
 	signal(SIGUSR1, handler); //ustawienie funkcji obsługującej sygnał SIGUSR1
 	conf config = build_config(argc, argv); //stworzenie ustawień na podstawie argumentów
-	printf("time = %ld\n", config.time);
-	printf("size = %ld\n",(long int)config.mmap_size);
-	printf("rec = %d\n", config.r);
+	printf("time = %ld\n", config.time); //wyświetla ustawiony czas
+	printf("size = %ld\n",(long int)config.mmap_size); //wyświetla ustawiony minimalny rozmiar
+	printf("rec = %d\n", config.r); //wyświetla czy kopiować rekurencyjnie (1 - tak, 0 - nie)
 
 	realpath(argv[1], config.s_dir); //dodanie do ustawień rzeczywistych ścieżek do katalogów
 	realpath(argv[2], config.d_dir);
